@@ -40,4 +40,25 @@ def beers(n)
     end
 end
 
-beers(20)
+def fibonacci(n)
+    array = [0,1]
+    i = 0
+    while array[i + 1] < n 
+        binding.pry
+    array.push(array[i] + array[i + 1])
+    i += 1
+    end
+     array
+end
+
+def fibonacci_recursive(n,start)
+    start = start
+    if (start[start.length - 1] > n)
+        p start
+    else
+        fibonacci_recursive(n,start.push(start[start.length-2] + start[start.length-1]))
+    end
+    end
+
+
+fibonacci_recursive(50,[0,1])
