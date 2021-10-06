@@ -61,4 +61,27 @@ def fibonacci_recursive(n,start)
     end
 
 
-fibonacci_recursive(50,[0,1])
+def merge_sort_recursive(list)
+    new_list = list
+    empty_list = []
+    binding.pry
+    if (list.length > 999991)
+        return new_list
+    else
+        i = 0
+        while i < list.length do 
+            binding.pry
+            new_list[i] > new_list[i + 1] ?  empty_list.push([new_list[i+1],new_list[i]]) : empty_list.push(new_list[i..i+ 1])
+            i += 2
+        end
+        
+        binding.pry
+        merge_sort_recursive(empty_list.flatten)
+    end
+end
+
+def left_side(left_side)
+end
+def right_side(right_side)
+end
+p merge_sort_recursive([5,2,1,3,6,4])
