@@ -63,25 +63,57 @@ def fibonacci_recursive(n,start)
 
 def merge_sort_recursive(list)
     new_list = list
-    empty_list = []
-    binding.pry
-    if (list.length > 999991)
+    split_list = [list.slice(0,list.length/2),list.slice(list.length/2,list.length)]
+    combined_list = []
+    if (combined_list.length != 0)
         return new_list
-    else
-        i = 0
-        while i < list.length do 
-            binding.pry
-            new_list[i] > new_list[i + 1] ?  empty_list.push([new_list[i+1],new_list[i]]) : empty_list.push(new_list[i..i+ 1])
-            i += 2
-        end
-        
-        binding.pry
-        merge_sort_recursive(empty_list.flatten)
+    elsif (combined_list.length == 0)
+
+      sorted_list_left = left_side(split_list[0])
+      sorted_list_right = right_side(split_list[1])
     end
 end
 
 def left_side(left_side)
+    binding.pry
+  sorted_list_left = []
+  first = 0
+  second = 0
+  if (sorted_list_left.length == 0)
+  while left_side[first] != nil 
+  if (left_side[first+1] != nil)
+    sorted_list_left.push(left_side.slice(first,first+2))
+    first += 2
+  else
+    sorted_list_left.push(left_side[first])
+    first += 2
+    left_side(sorted_list_left)
+  end
+  end
+  else
+
+  end
+  binding.pry
 end
+
 def right_side(right_side)
+    sorted_list_right =[]
+  first = 0
+  second = 0
+  if (sorted_list_right.length == 0)
+  while left_side[first] != nil
+    if (left_side[i+1]!= nil)
+        sorted_list_right.push(right_side.slice(first,first+2))
+        first += 2
+    else
+        sorted_list_right.push(right_side[first])
+        first += 2
+        right_side(sorted_list_right)
+    end
+  end 
+  else
+
+  end
 end
 p merge_sort_recursive([5,2,1,3,6,4])
+
