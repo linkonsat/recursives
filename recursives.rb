@@ -65,55 +65,185 @@ def merge_sort_recursive(list)
     new_list = list
     split_list = [list.slice(0,list.length/2),list.slice(list.length/2,list.length)]
     combined_list = []
-    if (combined_list.length != 0)
+    if (combined_list.length > 2)
         return new_list
     elsif (combined_list.length == 0)
-
-      sorted_list_left = left_side(split_list[0])
-      sorted_list_right = right_side(split_list[1])
+     
+      combined_list.push(left_side(split_list[0],0,[]))
+      combined_list.push(right_side(split_list[1],0,[]))
+  
     end
-end
-
-def left_side(left_side)
     binding.pry
-  sorted_list_left = []
-  first = 0
-  second = 0
-  if (sorted_list_left.length == 0)
-  while left_side[first] != nil 
-  if (left_side[first+1] != nil)
-    sorted_list_left.push(left_side.slice(first,first+2))
-    first += 2
-  else
-    sorted_list_left.push(left_side[first])
-    first += 2
-    left_side(sorted_list_left)
-  end
-  end
-  else
-
-  end
-  binding.pry
-end
-
-def right_side(right_side)
-    sorted_list_right =[]
-  first = 0
-  second = 0
-  if (sorted_list_right.length == 0)
-  while left_side[first] != nil
-    if (left_side[i+1]!= nil)
-        sorted_list_right.push(right_side.slice(first,first+2))
-        first += 2
-    else
-        sorted_list_right.push(right_side[first])
-        first += 2
-        right_side(sorted_list_right)
+    if (combined_list.length == 2)
+       combined_list.replace(final_sort(combined_list.flatten,0,[]))
     end
-  end 
-  else
+end
+
+def left_side(left_side,count,results)
+ #psuedocode so first we need to decide our base case
+ #The idea is we compare our elements and if any of them of our out of replace we need to call the function
+ #so we have count which should equal half the length of the array or length -1
+ count = count
+ sorted_list = left_side
+results = results
+ if (count == 0)
+ sorted_list.each_with_index do |item, index|
+    if (item != nil && sorted_list[index+1] != nil)
+    sorted_list[index..index + 1] = sorted_list[index] < sorted_list[index+1] ? [[sorted_list[index],sorted_list[index + 1]]] : [[sorted_list[index+1],sorted_list[index]]]
+    end
+
+    if (sorted_list[index+1] == nil)
+        sorted_list[index] = [sorted_list[index]]
+    end
+    end
+  end
+  if (count != left_side.flatten.length)
+     i = 0
+
+    
+     while i < left_side.length do
+      block_item = sorted_list.flatten[count]
+      if (left_side[i][0] != nil && left_side[i][0] < block_item && results.count(left_side[i][0]) < left_side.flatten.count(left_side[i][0]))
+        if (results.any?(left_side[i][0]))
+            results.insert(results.index(left_side[i][0]),sorted_list[i][0])
+        else 
+            results.push(left_side[i][0])
+        end
+      end
+      if (left_side[i][1] != nil && left_side[i][1] < block_item && results.count(left_side[i][1]) < left_side.flatten.count(left_side[i][1]))
+        if (results.any?(left_side[i][1]))
+                results.insert(results.index(left_side[i][1]),sorted_list[i][0])
+        else
+            results.push(left_side[i][1])
+            end
+      end
+      i += 1
+      
+    end
+
+    if (count == left_side.flatten.length - 1)
+        left_side.flatten.count(left_side.flatten.max).times do
+        results.push(left_side.flatten.max)
+        end
+    end
+        count +=1
+        left_side(sorted_list,count,results)
 
   end
+results
 end
-p merge_sort_recursive([5,2,1,3,6,4])
+
+def right_side(left_side,count,results)
+  
+ #psuedocode so first we need to decide our base case
+ #The idea is we compare our elements and if any of them of our out of replace we need to call the function
+ #so we have count which should equal half the length of the array or length -1
+ count = count
+ sorted_list = left_side
+results = results
+
+ if (count == 0)
+ sorted_list.each_with_index do |item, index|
+    #Now we know this split with occur since count starts off at 0
+    #here we split up the array, after it's split up we wantt o call merge sort again
+    #we also need to protect against a nil value so we need a conditional
+    if (item != nil && sorted_list[index+1] != nil)
+
+    sorted_list[index..index + 1] = sorted_list[index] < sorted_list[index+1] ? [[sorted_list[index],sorted_list[index + 1]]] : [[sorted_list[index+1],sorted_list[index]]]
+    end
+    end
+  end
+  if (count != left_side.flatten.length)
+     #in this scenario we want to use a loop to compare the first element to the second
+     #starting from the first item we go through each item
+     #we add 1 to count each time and use that as a index position
+     # if it's smaller we know it needs to go ahead and that item length is increased by one
+     # we can thus delete the spot when a match is found after we insert the item so we would insert the delete at the index position + 1
+     #keep recursively calling this method until count == array.length
+     i = 0
+     while i < left_side.length do
+      block_item = sorted_list.flatten[count]
+      if (left_side[i][0] < block_item && results.count(left_side[i][0]) < left_side.flatten.count(left_side[i][0]))
+        if (results.any?(left_side[i][0]))
+            results.insert(results.index(left_side[i][0]),sorted_list[i][0])
+        else 
+            results.push(left_side[i][0])
+        end
+      end
+      if (left_side[i][1] < block_item && results.count(left_side[i][1]) < left_side.flatten.count(left_side[i][1]))
+        if (results.any?(left_side[i][1]))
+                results.insert(results.index(left_side[i][1]),sorted_list[i][0])
+        else
+            results.push(left_side[i][1])
+            end
+      end
+      i += 1
+      
+    end
+
+    if (count == left_side.flatten.length - 1)
+        left_side.flatten.count(left_side.flatten.max).times do
+        results.push(left_side.flatten.max)
+        end
+    end
+        count +=1
+        right_side(sorted_list,count,results)
+
+  end
+results
+
+end
+
+def final_sort(left_side,count,results)
+    count = count
+    sorted_list = left_side
+   results = results
+    if (count == 0)
+    sorted_list.each_with_index do |item, index|
+       if (item != nil && sorted_list[index+1] != nil)
+       sorted_list[index..index + 1] = sorted_list[index] < sorted_list[index+1] ? [[sorted_list[index],sorted_list[index + 1]]] : [[sorted_list[index+1],sorted_list[index]]]
+       end
+   
+       if (sorted_list[index+1] == nil)
+           sorted_list[index] = [sorted_list[index]]
+       end
+       end
+     end
+     if (count != left_side.flatten.length)
+        i = 0
+   
+  
+        while i < left_side.length do
+
+         block_item = sorted_list.flatten[count]
+         if (left_side[i][0] != nil && left_side[i][0] < block_item && results.count(left_side[i][0]) < left_side.flatten.count(left_side[i][0]))
+           if (results.any?(left_side[i][0]))
+               results.insert(results.index(left_side[i][0]),sorted_list[i][0])
+           else 
+               results.push(left_side[i][0])
+           end
+         end
+         if (left_side[i][1] != nil && left_side[i][1] < block_item && results.count(left_side[i][1]) < left_side.flatten.count(left_side[i][1]))
+           if (results.any?(left_side[i][1]))
+                   results.insert(results.index(left_side[i][1]),sorted_list[i][1])
+           else
+               results.push(left_side[i][1])
+               end
+         end
+         i += 1
+         
+       end
+   
+       if (count == left_side.flatten.length - 1)
+           left_side.flatten.count(left_side.flatten.max).times do
+           results.push(left_side.flatten.max)
+           end
+       end
+           count +=1
+           final_sort(sorted_list,count,results)
+   
+     end
+   results
+end
+p merge_sort_recursive([5,2,1,3,6,4,3,5,7,8,3,5,99,2,1])
 
